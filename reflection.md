@@ -12,6 +12,11 @@
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
 
+**c. Three core actions a user should be able to perform**
+- See a schedule of all events for the day
+- See a list of all pets
+- Schedule an event
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
