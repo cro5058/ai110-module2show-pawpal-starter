@@ -1,0 +1,55 @@
+classDiagram
+    %% Replace the placeholders below with your actual classes, attributes, methods, and relationships.
+    %% Keep this file updated so it matches your final implementation.
+
+    class Pet {
+        +String name
+
+        +changeName(String newName) None
+    }
+
+    class Owner {
+        +String name
+        +List[Pet] pets
+
+        +changeName(String newName) None
+    }
+
+    class Task {
+        +String title
+        +List[Pet] petsInvolved
+        +Float duration
+        +DateTime startTime
+        +DateTime endTime
+        +Priority priority
+
+        +changeTitle(String newTitle) None
+        +changeDuration(Float newDuration) None
+        +changeStartTime(DateTime newStartTime) None
+        +changeEndTime(DateTime newEndTime) None
+    }
+
+    class Schedule {
+        +List[Task] tasks
+
+        +addTask(Task newTask) None
+        +removeTask(Task task) None
+        +searchTasks(String query) Union[List[Task], None]
+    }
+
+    class Scheduler {
+        +sortTasks(List[Task] tasks, Callable key) None
+        +createSchedule(List[Task] tasks, int MinutesAvailable) Tuple[Schedule, string]
+    }
+
+    enumeration Priority {
+        HIGH
+        MEDIUM
+        LOW
+    }
+
+    Owner --> Pet
+    Task --> Pet
+    Task --> Priority
+    Scheduler --> Schedule
+    Schedule --> Task : containment 
