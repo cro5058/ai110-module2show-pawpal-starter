@@ -7,10 +7,22 @@
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+In my initial UML design, I included the classes
+- Pet, to represent a real-life pet. This class did not hold any information beyond the pet's name, but it could be expanded in the future if necessary.
+- Owner, to represent the owner of various pets. This class held the owner's name and their list of pets.
+- Task, to represent a task that an owner would need to complete. This class held a large amount of information, from the title of the task, to the pets involved, to the duration, start time, end time, and priority.
+- Schedule, which would contain a collection of tasks and when they would be completed. Tasks could be added, removed, and searched.
+- Scheduler, to handle the logic of sorting and scheduling tasks.
+- Priority, an enumeration that would determine the priority of a task.
+
 **b. Design changes**
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+My design did change during implementation. I asked Claude for feedback on my implementation using the prompt, `"Do you notice any missing relationships or potential logic bottlenecks in @pawpal_system.py  ? I am attaching @diagrams/uml_draft.mmd  for reference"`. In response, Claude made a few suggestions:
+- It pointed out that my initial UML contained mutator functions for certain fields, such as `name` in the `Pet` class. Because the actual implementation used a Python dataclass that was not frozen, I decided that it would be possible to set the name directly without accessing it through a function. I similarly deleted the mutators in the `Owner` and `Task` classes.
+- Claude pointed out that a Schedule did not have an owner, so I added an owner field to the `Schedule` class.
 
 **c. Three core actions a user should be able to perform**
 - See a schedule of all events for the day

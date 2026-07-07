@@ -3,15 +3,11 @@ classDiagram
 
     class Pet {
         +String name
-
-        +changeName(String newName) None
     }
 
     class Owner {
         +String name
         +List~Pet~ pets
-
-        +changeName(String newName) None
     }
 
     class Task {
@@ -21,15 +17,11 @@ classDiagram
         +DateTime startTime
         +DateTime endTime
         +Priority priority
-
-        +changeTitle(String newTitle) None
-        +changeDuration(Float newDuration) None
-        +changeStartTime(DateTime newStartTime) None
-        +changeEndTime(DateTime newEndTime) None
     }
 
     class Schedule {
         +List~Task~ tasks
+        +Owner owner
 
         +addTask(Task newTask) None
         +removeTask(Task task) None

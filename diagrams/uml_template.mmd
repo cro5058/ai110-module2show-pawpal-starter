@@ -18,7 +18,6 @@ classDiagram
     class Task {
         +String title
         +List[Pet] petsInvolved
-        +Float duration
         +DateTime startTime
         +DateTime endTime
         +Priority priority
@@ -32,8 +31,6 @@ classDiagram
     class Schedule {
         +List[Task] tasks
 
-        +addTask(Task newTask) None
-        +removeTask(Task task) None
         +searchTasks(String query) Union[List[Task], None]
     }
 
@@ -51,5 +48,4 @@ classDiagram
     Owner --> Pet
     Task --> Pet
     Task --> Priority
-    Scheduler --> Schedule
     Schedule --> Task : containment 

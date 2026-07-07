@@ -34,12 +34,10 @@ class Owner:
         self.name = name
         self.pets: List[Pet] = pets if pets is not None else []
 
-    def changeName(self, newName: str) -> None:
-        ...
-
 
 class Schedule:
-    def __init__(self, tasks: Optional[List[Task]] = None) -> None:
+    def __init__(self, owner: Owner, tasks: Optional[List[Task]] = None) -> None:
+        self.owner = owner
         self.tasks: List[Task] = tasks if tasks is not None else []
 
     def addTask(self, newTask: Task) -> None:
