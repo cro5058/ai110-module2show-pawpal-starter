@@ -25,7 +25,7 @@ class Pet:
     name: str
 
     def __str__(self) -> str:
-        return self.name
+        return "Pet: " + self.name
 
 
 @dataclass
@@ -53,7 +53,7 @@ class Task:
     def __str__(self) -> str:
         pets = ", ".join(str(pet) for pet in self.petsInvolved) or "no pets"
         return (
-            f"{self.title} [{self.priority.value}] "
+            f"Task {self.title} [{self.priority.value}] "
             f"({self.duration} min, {pets}) — {self.completion_status.value}"
         )
 
@@ -73,7 +73,7 @@ class Owner:
 
     def __str__(self) -> str:
         pets = ", ".join(str(pet) for pet in self.pets) or "no pets"
-        return f"{self.name} (pets: {pets})"
+        return f"Owner {self.name} (pets: {pets})"
 
 
 class Schedule:
