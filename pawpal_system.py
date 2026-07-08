@@ -14,6 +14,12 @@ class Priority(Enum):
     LOW = "LOW"
 
 
+class CompletionStatus(Enum):
+    NOT_STARTED = "NOT STARTED"
+    IN_PROGRESS = "IN PROGRESS"
+    DONE = "DONE"
+
+
 @dataclass
 class Pet:
     name: str
@@ -27,27 +33,13 @@ class Task:
     startTime: datetime
     endTime: datetime
     priority: Priority
+    completion_status: CompletionStatus
 
 
 class Owner:
     def __init__(self, name: str, pets: Optional[List[Pet]] = None) -> None:
         self.name = name
         self.pets: List[Pet] = pets if pets is not None else []
-
-
-class Schedule:
-    def __init__(self, owner: Owner, tasks: Optional[List[Task]] = None) -> None:
-        self.owner = owner
-        self.tasks: List[Task] = tasks if tasks is not None else []
-
-    def addTask(self, newTask: Task) -> None:
-        ...
-
-    def removeTask(self, task: Task) -> None:
-        ...
-
-    def searchTasks(self, query: str) -> Optional[List[Task]]:
-        ...
 
 
 class Scheduler:

@@ -23,8 +23,10 @@ In my initial UML design, I included the classes
 My design did change during implementation. I asked Claude for feedback on my implementation using the prompt, `"Do you notice any missing relationships or potential logic bottlenecks in @pawpal_system.py  ? I am attaching @diagrams/uml_draft.mmd  for reference"`. In response, Claude made a few suggestions:
 - It pointed out that my initial UML contained mutator functions for certain fields, such as `name` in the `Pet` class. Because the actual implementation used a Python dataclass that was not frozen, I decided that it would be possible to set the name directly without accessing it through a function. I similarly deleted the mutators in the `Owner` and `Task` classes.
 - Claude pointed out that a Schedule did not have an owner, so I added an owner field to the `Schedule` class.
+- Based on Claude's feedback, I also made `Priority` an enumeration.
 
 **c. Three core actions a user should be able to perform**
+
 - See a schedule of all events for the day
 - See a list of all pets
 - Schedule an event
