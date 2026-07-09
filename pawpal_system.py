@@ -23,6 +23,7 @@ class CompletionStatus(Enum):
 @dataclass
 class Pet:
     name: str
+    tasks: List[Task]
 
     def __str__(self) -> str:
         return "Pet: " + self.name
@@ -31,7 +32,6 @@ class Pet:
 @dataclass
 class Task:
     title: str
-    petsInvolved: List[Pet]
     duration: float
     startTime: datetime
     endTime: datetime
