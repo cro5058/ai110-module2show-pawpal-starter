@@ -3,12 +3,14 @@ classDiagram
 
     class Pet {
         +String name
-        +List[Task] tasks
+        +List~Task~ tasks
     }
 
     class Owner {
         +String name
         +List~Pet~ pets
+
+        +allTasks() List~Task~
     }
 
     class Task {
@@ -17,6 +19,10 @@ classDiagram
         +DateTime startTime
         +DateTime endTime
         +Priority priority
+
+        +markInProgress() None
+        +markDone() None
+        +isDone() bool
     }
 
     class Schedule {
@@ -26,11 +32,19 @@ classDiagram
         +addTask(Task newTask) None
         +removeTask(Task task) None
         +searchTasks(String query) Union~List~Task~, None~
+        +totalDuration() float
     }
 
     class Scheduler {
         +sortTasks(List~Task~ tasks, Callable key) None
         +createSchedule(List~Task~ tasks, int minutesAvailable) Tuple~Schedule, String~
+    }
+
+    class CompletionStatus {
+        <<enumeration>>
+        NOT_STARTED
+        IN_PROGRESS
+        DONE
     }
 
     class Priority {
@@ -41,7 +55,9 @@ classDiagram
     }
 
     Owner "1" --> "*" Pet : owns
-    Task "*" --> "*" Pet : involves
+    Pet "1" --> "*" Task : has
     Task --> Priority : has
+    Task --> CompletionStatus : has
     Scheduler ..> Schedule : creates
+    Scheduler ..> Owner : reads tasks from
     Schedule "1" o-- "*" Task : contains

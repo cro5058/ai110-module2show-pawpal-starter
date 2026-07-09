@@ -47,14 +47,10 @@ class Task:
     def isDone(self) -> bool:
         return self.completion_status is CompletionStatus.DONE
 
-    def involves(self, pet: Pet) -> bool:
-        return pet in self.petsInvolved
-
     def __str__(self) -> str:
-        pets = ", ".join(str(pet) for pet in self.petsInvolved) or "no pets"
         return (
             f"Task {self.title} [{self.priority.value}] "
-            f"({self.duration} min, {pets}) — {self.completion_status.value}"
+            f"(Estimated duration {self.duration}) — {self.completion_status.value}"
         )
 
 
@@ -70,6 +66,10 @@ class Owner:
     def removePet(self, pet: Pet) -> None:
         if pet in self.pets:
             self.pets.remove(pet)
+
+    def allTasks(self) -> List[Task]:
+        """Gather every task across all of this owner's pets."""
+        return [task for pet in self.pets for task in pet.tasks]
 
     def __str__(self) -> str:
         pets = ", ".join(str(pet) for pet in self.pets) or "no pets"
