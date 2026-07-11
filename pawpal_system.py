@@ -25,14 +25,24 @@ class Pet:
     name: str
     tasks: List[Task]
 
+    def addTask(self, t: Task) -> None:
+        self.tasks.append(t)
+
+    def removeTask(self, s: str) -> None:
+        for t in self.tasks:
+            if t.title == s:
+                self.tasks.remove(t)
+
     def __str__(self) -> str:
         return "Pet: " + self.name
+    
+
+    
 
 
 @dataclass
 class Task:
     title: str
-    duration: float
     startTime: datetime
     endTime: datetime
     priority: Priority
@@ -50,7 +60,7 @@ class Task:
     def __str__(self) -> str:
         return (
             f"Task {self.title} [{self.priority.value}] "
-            f"(Estimated duration {self.duration}) — {self.completion_status.value}"
+            f"{self.completion_status.value}"
         )
 
 
