@@ -48,6 +48,11 @@ class Task:
     priority: Priority
     completion_status: CompletionStatus = CompletionStatus.NOT_STARTED
 
+    @property
+    def duration(self) -> float:
+        """Task length in minutes, derived from startTime and endTime."""
+        return (self.endTime - self.startTime).total_seconds() / 60
+
     def markInProgress(self) -> None:
         self.completion_status = CompletionStatus.IN_PROGRESS
 
@@ -59,8 +64,10 @@ class Task:
 
     def __str__(self) -> str:
         return (
-            f"Task {self.title} [{self.priority.value}] "
+            f"Task {self.title} [{self.priority.value} Priority] "
             f"{self.completion_status.value}"
+            "\n"
+            f"\t{self.startTime} - {self.endTime}"
         )
 
 
@@ -122,7 +129,7 @@ class Scheduler:
         tasks.sort(key=key)
 
     def createSchedule(
-        self, tasks: List[Task], minutesAvailable: int
+        self, owner: Owner, minutesAvailable: int
     ) -> Tuple[Schedule, str]:
         """Greedily pack the highest-priority tasks that fit in the time budget.
 
@@ -131,12 +138,13 @@ class Scheduler:
         priority_rank = {Priority.HIGH: 0, Priority.MEDIUM: 1, Priority.LOW: 2}
 
         # Highest priority first, then shortest task to fit more in.
+        tasks = owner.allTasks()
         ordered = sorted(
             tasks,
             key=lambda task: (priority_rank[task.priority], task.duration),
         )
 
-        schedule = Schedule(owner=Owner("Unassigned"))
+        schedule = Schedule(owner=owner)
         remaining = minutesAvailable
         skipped: List[Task] = []
 

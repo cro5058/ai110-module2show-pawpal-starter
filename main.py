@@ -11,6 +11,8 @@ from pawpal_system import (
 )
 
 
+MINUTES_IN_DAY = 24 * 60
+
 def main():
     # Create an Owner
     o = Owner('owner1', [])
@@ -39,14 +41,26 @@ def main():
     o.addPet(p1)
     o.addPet(p2)
 
+    # Test print all tasks before scheduling
+    print("All tasks:")
+    for t in o.allTasks():
+        print(t)
+    print()
+
     # Create a schedule for the day
     scheduler = Scheduler()
-    schedule = scheduler.createSchedule(tasks=o.allTasks, 
-                                        minutesAvailable=(24 * 60))
+    schedule = scheduler.createSchedule(owner=o, 
+                                        minutesAvailable=MINUTES_IN_DAY)
 
     # Print a "Today's Schedule" to the terminal
-    print(schedule)
+    print(schedule[0])
 
+
+    #TODO:
+    """
+    - Add start and end time to tasks
+    - ensure that the scheduled tasks do not conflict with each other.
+    """
 
 if __name__ == "__main__":
     main()
