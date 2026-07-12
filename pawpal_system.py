@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from bisect import bisect_right
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -99,10 +100,18 @@ class Owner:
 class Schedule:
     def __init__(self, owner: Owner, tasks: Optional[List[Task]] = None) -> None:
         self.owner = owner
-        self.tasks: List[Task] = tasks if tasks is not None else []
+        self.tasks: List[Task] = sorted(tasks, key=self._chronological) if tasks else []
+
+    @staticmethod
+    def _chronological(task: Task) -> datetime:
+        return task.startTime
 
     def addTask(self, newTask: Task) -> None:
-        self.tasks.append(newTask)
+        # Insert so tasks stay sorted chronologically by start time.
+        index = bisect_right(
+            [task.startTime for task in self.tasks], newTask.startTime
+        )
+        self.tasks.insert(index, newTask)
 
     def removeTask(self, task: Task) -> None:
         if task in self.tasks:
