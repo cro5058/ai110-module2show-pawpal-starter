@@ -27,6 +27,7 @@ class Pet:
     tasks: List[Task] = field(default_factory=list)
 
     def addTask(self, t: Task) -> None:
+        """Attach a task to this pet, detaching it from any previous pet."""
         if t.pet is not None and t.pet is not self:
             t.pet.removeTask(t)  # move it off its old pet first
         t.pet = self
@@ -34,11 +35,13 @@ class Pet:
             self.tasks.append(t)
 
     def removeTask(self, t: Task) -> None:
+        """Detach the given task from this pet if present."""
         if t in self.tasks:
             self.tasks.remove(t)
             t.pet = None
 
     def __str__(self) -> str:
+        """Return the pet's name."""
         return self.name
 
 
@@ -58,15 +61,19 @@ class Task:
         return (self.endTime - self.startTime).total_seconds() / 60
 
     def markInProgress(self) -> None:
+        """Set this task's status to in progress."""
         self.completion_status = CompletionStatus.IN_PROGRESS
 
     def markDone(self) -> None:
+        """Set this task's status to done."""
         self.completion_status = CompletionStatus.DONE
 
     def isDone(self) -> bool:
+        """Return True if this task is marked done."""
         return self.completion_status is CompletionStatus.DONE
 
     def __str__(self) -> str:
+        """Return a human-readable summary of the task."""
         return (
             f"{self.title} for {self.pet} [Priority - {self.priority.value}] "
             f"[Status - {self.completion_status.value}]"
@@ -77,14 +84,17 @@ class Task:
 
 class Owner:
     def __init__(self, name: str, pets: Optional[List[Pet]] = None) -> None:
+        """Create an owner with a name and an optional starting list of pets."""
         self.name = name
         self.pets: List[Pet] = pets if pets is not None else []
 
     def addPet(self, pet: Pet) -> None:
+        """Add a pet to this owner if not already present."""
         if pet not in self.pets:
             self.pets.append(pet)
 
     def removePet(self, pet: Pet) -> None:
+        """Remove a pet from this owner if present."""
         if pet in self.pets:
             self.pets.remove(pet)
 
@@ -93,20 +103,24 @@ class Owner:
         return [task for pet in self.pets for task in pet.tasks]
 
     def __str__(self) -> str:
+        """Return a summary of the owner and their pets."""
         pets = ", ".join(str(pet) for pet in self.pets) or "no pets"
         return f"Owner {self.name} (pets: {pets})"
 
 
 class Schedule:
     def __init__(self, owner: Owner, tasks: Optional[List[Task]] = None) -> None:
+        """Create a schedule for an owner, keeping tasks sorted chronologically."""
         self.owner = owner
         self.tasks: List[Task] = sorted(tasks, key=self._chronological) if tasks else []
 
     @staticmethod
     def _chronological(task: Task) -> datetime:
+        """Return a task's start time, used as the chronological sort key."""
         return task.startTime
 
     def addTask(self, newTask: Task) -> None:
+        """Insert a task, keeping the schedule sorted by start time."""
         # Insert so tasks stay sorted chronologically by start time.
         index = bisect_right(
             [task.startTime for task in self.tasks], newTask.startTime
@@ -114,10 +128,12 @@ class Schedule:
         self.tasks.insert(index, newTask)
 
     def removeTask(self, task: Task) -> None:
+        """Remove a task from the schedule if present."""
         if task in self.tasks:
             self.tasks.remove(task)
 
     def searchTasks(self, query: str) -> Optional[List[Task]]:
+        """Return tasks whose title contains the query, or None if no matches."""
         needle = query.strip().lower()
         if not needle:
             return None
@@ -125,9 +141,11 @@ class Schedule:
         return matches or None
 
     def totalDuration(self) -> float:
+        """Return the combined duration of all scheduled tasks, in minutes."""
         return sum(task.duration for task in self.tasks)
 
     def __str__(self) -> str:
+        """Return a formatted listing of the owner's scheduled tasks."""
         if not self.tasks:
             return f"Schedule for {self.owner.name}: (empty)"
         lines = [f"Schedule for {self.owner.name}:"]
