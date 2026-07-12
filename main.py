@@ -56,11 +56,5 @@ def main():
     print(schedule[0])
 
 
-    #TODO:
-    """
-    - Add start and end time to tasks
-    - ensure that the scheduled tasks do not conflict with each other.
-    """
-
 if __name__ == "__main__":
     main()

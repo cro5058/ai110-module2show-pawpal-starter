@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Callable, List, Optional, Tuple
@@ -23,21 +23,23 @@ class CompletionStatus(Enum):
 @dataclass
 class Pet:
     name: str
-    tasks: List[Task]
+    tasks: List[Task] = field(default_factory=list)
 
     def addTask(self, t: Task) -> None:
-        self.tasks.append(t)
+        if t.pet is not None and t.pet is not self:
+            t.pet.removeTask(t)  # move it off its old pet first
+        t.pet = self
+        if t not in self.tasks:
+            self.tasks.append(t)
 
-    def removeTask(self, s: str) -> None:
-        for t in self.tasks:
-            if t.title == s:
-                self.tasks.remove(t)
+    def removeTask(self, t: Task) -> None:
+        if t in self.tasks:
+            self.tasks.remove(t)
+            t.pet = None
 
     def __str__(self) -> str:
-        return "Pet: " + self.name
-    
+        return self.name
 
-    
 
 
 @dataclass
@@ -47,6 +49,7 @@ class Task:
     endTime: datetime
     priority: Priority
     completion_status: CompletionStatus = CompletionStatus.NOT_STARTED
+    pet: Optional[Pet] = field(default=None, repr=False)  # back-ref, set by Pet.addTask
 
     @property
     def duration(self) -> float:
@@ -64,7 +67,7 @@ class Task:
 
     def __str__(self) -> str:
         return (
-            f"Task {self.title} [{self.priority.value} Priority] "
+            f"{self.title} for {self.pet} [{self.priority.value} Priority] "
             f"{self.completion_status.value}"
             "\n"
             f"\t{self.startTime} - {self.endTime}"
