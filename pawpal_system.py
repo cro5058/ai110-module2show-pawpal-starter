@@ -68,8 +68,8 @@ class Task:
 
     def __str__(self) -> str:
         return (
-            f"{self.title} for {self.pet} [{self.priority.value} Priority] "
-            f"{self.completion_status.value}"
+            f"{self.title} for {self.pet} [Priority - {self.priority.value}] "
+            f"[Status - {self.completion_status.value}]"
             "\n"
             f"\t{self.startTime} - {self.endTime}"
         )
